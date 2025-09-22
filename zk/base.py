@@ -1653,6 +1653,9 @@ class ZK(object):
                 attendances.append(attendance)
         else:
             while len(attendance_data) >= 40:
+                code_init = b'\xff255\x00\x00\x00\x00\x00'
+                if attendance_data.find(code_init) == 0:
+                    attendance_data = attendance_data[len(code_init):]
                 uid, user_id, status, timestamp, punch, space = unpack('<H24sB4sB8s', attendance_data.ljust(40, b'\x00')[:40])
                 if self.verbose: print (codecs.encode(attendance_data[:40], 'hex'))
                 user_id = (user_id.split(b'\x00')[0]).decode(errors='ignore')
