@@ -4,6 +4,12 @@
 
 `pyzk` is an unofficial library of zksoftware (zkteco family) attendance machine.
 
+This fork includes additional features:
+- **ZK Device Simulator** - Test your code without physical hardware
+- **.NET Integration** - Use pyzk from C# and other .NET languages
+- **Serial Communication Support** - Connect via RS232/RS485
+- **Enhanced Testing Tools** - Debug and test utilities
+
 # Installation
 
 There is some installation method you can use below:
@@ -468,3 +474,79 @@ If you have another version tested and it worked, please inform me to update thi
 * HTTP Rest api
 * ~~Create real time api (if possible)~~
 * and much more ...
+
+# New Features
+
+## ZK Device Simulator
+
+Test your pyzk applications without needing physical hardware! The simulator emulates a ZKTeco device over TCP.
+
+**Usage:**
+```sh
+# Start the simulator (defaults to port 4370)
+python zk_simulator.py
+
+# Or specify a custom port
+python zk_simulator.py --port 5000
+```
+
+Then connect to it using pyzk:
+```python
+from zk import ZK
+
+zk = ZK('127.0.0.1', port=4370)
+conn = zk.connect()
+# Use all standard pyzk commands
+users = conn.get_users()
+conn.disconnect()
+```
+
+See [ZK_SIMULATOR_README.md](ZK_SIMULATOR_README.md) for more details.
+
+## .NET Integration
+
+Use pyzk from C# and other .NET languages! The integration package provides a clean C# API wrapper around pyzk.
+
+**Quick Start:**
+```csharp
+using PyZKExample;
+
+var client = new PyZKClient("192.168.1.201", 4370);
+if (client.Connect())
+{
+    var users = client.GetUsers();
+    foreach (var user in users)
+    {
+        Console.WriteLine($"User: {user.Name} (UID: {user.Uid})");
+    }
+    client.Disconnect();
+}
+```
+
+See [dotnet_integration/README.md](dotnet_integration/README.md) and [dotnet_integration/QUICKSTART.md](dotnet_integration/QUICKSTART.md) for complete documentation.
+
+## Serial Communication Support
+
+Connect to ZK devices via RS232/RS485 serial connections in addition to TCP/IP.
+
+**Example:**
+```python
+from zk import ZK
+
+# Connect via serial port
+zk = ZK('/dev/ttyUSB0', port=4370, timeout=5, is_serial=True)
+conn = zk.connect()
+# Use all standard pyzk commands
+conn.disconnect()
+```
+
+See `test_serial.py` and `test_serial_debug.py` for examples.
+
+## Enhanced Testing & Debugging
+
+Additional testing utilities included:
+- `test_simulator.py` - Test script for the simulator
+- `test_serial.py` - Serial communication examples
+- `test_tcp_header.py` - TCP protocol debugging
+- `debug_test.py` - General debugging utilities
+- `test_both.sh` - Run multiple test scenarios
