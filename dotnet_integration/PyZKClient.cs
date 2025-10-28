@@ -198,6 +198,207 @@ namespace PyZK.DotNet
     }
 
     /// <summary>
+    /// Lock state response
+    /// </summary>
+    public class LockStateResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("locked")]
+        public bool Locked { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// Face version response
+    /// </summary>
+    public class FaceVersionResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("face_version")]
+        public string FaceVersion { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// Fingerprint version response
+    /// </summary>
+    public class FingerprintVersionResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("fingerprint_version")]
+        public string FingerprintVersion { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// Network parameters response
+    /// </summary>
+    public class NetworkParamsResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("network")]
+        public string Network { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// PIN width response
+    /// </summary>
+    public class PinWidthResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("pin_width")]
+        public int PinWidth { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// Extend format response
+    /// </summary>
+    public class ExtendFormatResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("extend_format")]
+        public int ExtendFormat { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// User extend format response
+    /// </summary>
+    public class UserExtendFormatResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("user_extend_format")]
+        public int UserExtendFormat { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// Face function enabled response
+    /// </summary>
+    public class FaceFunctionResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("face_function_enabled")]
+        public bool FaceFunctionEnabled { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// Firmware compatibility response
+    /// </summary>
+    public class FirmwareCompatibilityResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("old_firmware_compatible")]
+        public bool OldFirmwareCompatible { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// Fingerprint template information
+    /// </summary>
+    public class Template
+    {
+        [JsonPropertyName("uid")]
+        public int Uid { get; set; }
+
+        [JsonPropertyName("fid")]
+        public int Fid { get; set; }
+
+        [JsonPropertyName("valid")]
+        public int Valid { get; set; }
+
+        [JsonPropertyName("template_size")]
+        public int TemplateSize { get; set; }
+    }
+
+    /// <summary>
+    /// Templates list response
+    /// </summary>
+    public class TemplatesResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+
+        [JsonPropertyName("templates")]
+        public List<Template> Templates { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// Single template response
+    /// </summary>
+    public class TemplateResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("template")]
+        public Template Template { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
+    /// Cancel capture response
+    /// </summary>
+    public class CancelCaptureResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("cancelled")]
+        public bool Cancelled { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
+    }
+
+    /// <summary>
     /// .NET client for PyZK library using Python.NET
     /// </summary>
     public class PyZKClient : IDisposable
@@ -479,6 +680,359 @@ namespace PyZK.DotNet
             using (Py.GIL())
             {
                 string jsonResult = (string)_wrapper.poweroff_device();
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Unlocks the door for a specified time
+        /// </summary>
+        /// <param name="time">Time in seconds to keep door unlocked (default: 3)</param>
+        /// <returns>Operation result</returns>
+        public OperationResponse UnlockDoor(int time = 3)
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.unlock_door(time);
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets the current door lock state
+        /// </summary>
+        /// <returns>Lock state information</returns>
+        public LockStateResponse GetLockState()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_lock_state();
+                return JsonSerializer.Deserialize<LockStateResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Writes text to device LCD screen
+        /// </summary>
+        /// <param name="lineNumber">Line number on LCD (0-based)</param>
+        /// <param name="text">Text to display</param>
+        /// <returns>Operation result</returns>
+        public OperationResponse WriteLCD(int lineNumber, string text)
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.write_lcd(lineNumber, text);
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Clears the device LCD screen
+        /// </summary>
+        /// <returns>Operation result</returns>
+        public OperationResponse ClearLCD()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.clear_lcd();
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Refreshes device data
+        /// </summary>
+        /// <returns>Operation result</returns>
+        public OperationResponse RefreshData()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.refresh_data();
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Frees device buffer
+        /// </summary>
+        /// <returns>Operation result</returns>
+        public OperationResponse FreeData()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.free_data();
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets face algorithm version
+        /// </summary>
+        /// <returns>Face version information</returns>
+        public FaceVersionResponse GetFaceVersion()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_face_version();
+                return JsonSerializer.Deserialize<FaceVersionResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets fingerprint algorithm version
+        /// </summary>
+        /// <returns>Fingerprint version information</returns>
+        public FingerprintVersionResponse GetFingerprintVersion()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_fp_version();
+                return JsonSerializer.Deserialize<FingerprintVersionResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets device network parameters (IP, mask, gateway)
+        /// </summary>
+        /// <returns>Network parameters</returns>
+        public NetworkParamsResponse GetNetworkParams()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_network_params();
+                return JsonSerializer.Deserialize<NetworkParamsResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets PIN width configuration
+        /// </summary>
+        /// <returns>PIN width</returns>
+        public PinWidthResponse GetPinWidth()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_pin_width();
+                return JsonSerializer.Deserialize<PinWidthResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets extend format configuration
+        /// </summary>
+        /// <returns>Extend format</returns>
+        public ExtendFormatResponse GetExtendFormat()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_extend_fmt();
+                return JsonSerializer.Deserialize<ExtendFormatResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets user extend format configuration
+        /// </summary>
+        /// <returns>User extend format</returns>
+        public UserExtendFormatResponse GetUserExtendFormat()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_user_extend_fmt();
+                return JsonSerializer.Deserialize<UserExtendFormatResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Checks if face function is enabled
+        /// </summary>
+        /// <returns>Face function status</returns>
+        public FaceFunctionResponse GetFaceFunctionEnabled()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_face_fun_on();
+                return JsonSerializer.Deserialize<FaceFunctionResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Checks firmware compatibility
+        /// </summary>
+        /// <returns>Firmware compatibility information</returns>
+        public FirmwareCompatibilityResponse GetCompatOldFirmware()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_compat_old_firmware();
+                return JsonSerializer.Deserialize<FirmwareCompatibilityResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets all fingerprint templates from the device
+        /// </summary>
+        /// <returns>List of templates</returns>
+        public TemplatesResponse GetTemplates()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_templates_json();
+                return JsonSerializer.Deserialize<TemplatesResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets a specific user's fingerprint template by UID
+        /// </summary>
+        /// <param name="uid">User UID</param>
+        /// <param name="tempId">Template ID (finger index 0-9, default: 0)</param>
+        /// <returns>Template information</returns>
+        public TemplateResponse GetUserTemplate(int uid, int tempId = 0)
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_user_template_json(uid: uid, temp_id: tempId);
+                return JsonSerializer.Deserialize<TemplateResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Gets a specific user's fingerprint template by user ID string
+        /// </summary>
+        /// <param name="userId">User ID string</param>
+        /// <param name="tempId">Template ID (finger index 0-9, default: 0)</param>
+        /// <returns>Template information</returns>
+        public TemplateResponse GetUserTemplateByUserId(string userId, int tempId = 0)
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.get_user_template_json(temp_id: tempId, user_id: userId);
+                return JsonSerializer.Deserialize<TemplateResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Deletes a specific user's fingerprint template
+        /// </summary>
+        /// <param name="uid">User UID (optional if userId provided)</param>
+        /// <param name="tempId">Template ID (finger index 0-9, default: 0)</param>
+        /// <param name="userId">User ID string (optional if uid provided)</param>
+        /// <returns>Operation result</returns>
+        public OperationResponse DeleteUserTemplate(int uid = 0, int tempId = 0, string userId = "")
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.delete_user_template(uid, tempId, userId);
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Starts fingerprint enrollment for a user
+        /// </summary>
+        /// <param name="uid">User UID (optional if userId provided)</param>
+        /// <param name="tempId">Template ID (finger index 0-9, default: 0)</param>
+        /// <param name="userId">User ID string (optional if uid provided)</param>
+        /// <returns>Operation result</returns>
+        public OperationResponse EnrollUser(int uid = 0, int tempId = 0, string userId = "")
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.enroll_user(uid, tempId, userId);
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Starts user verification mode
+        /// </summary>
+        /// <returns>Operation result</returns>
+        public OperationResponse VerifyUser()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.verify_user();
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Cancels fingerprint capture operation
+        /// </summary>
+        /// <returns>Cancel capture result</returns>
+        public CancelCaptureResponse CancelCapture()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.cancel_capture();
+                return JsonSerializer.Deserialize<CancelCaptureResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Registers for device events
+        /// </summary>
+        /// <param name="flags">Event flags (see ZK const.EF_* constants)</param>
+        /// <returns>Operation result</returns>
+        public OperationResponse RegisterEvent(int flags)
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.reg_event(flags);
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Sets SDK build to 1
+        /// </summary>
+        /// <returns>Operation result</returns>
+        public OperationResponse SetSdkBuild1()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.set_sdk_build_1();
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Clears all data from device (users, attendance, fingerprints)
+        /// WARNING: This will delete all data!
+        /// </summary>
+        /// <returns>Operation result</returns>
+        public OperationResponse ClearData()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.clear_data();
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Enables device (allow user activity)
+        /// </summary>
+        /// <returns>Operation result</returns>
+        public OperationResponse EnableDevice()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.enable_device();
+                return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
+            }
+        }
+
+        /// <summary>
+        /// Disables device (lock device, prevent user activity)
+        /// </summary>
+        /// <returns>Operation result</returns>
+        public OperationResponse DisableDevice()
+        {
+            using (Py.GIL())
+            {
+                string jsonResult = (string)_wrapper.disable_device();
                 return JsonSerializer.Deserialize<OperationResponse>(jsonResult);
             }
         }

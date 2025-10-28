@@ -158,3 +158,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# .NET build artifacts
+dotnet_integration/bin/
+dotnet_integration/obj/
+dotnet_integration/TestResults/
+dotnet_integration/CoverageReport/

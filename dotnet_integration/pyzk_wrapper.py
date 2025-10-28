@@ -394,6 +394,562 @@ class PyZKWrapper:
             })
         except Exception as e:
             return json.dumps({"success": False, "error": str(e)})
+    
+    def unlock_door(self, time: int = 3) -> str:
+        """
+        Unlock the door for specified time.
+        
+        Args:
+            time: Time in seconds to keep door unlocked (default: 3)
+            
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.unlock(time=time)
+            return json.dumps({
+                "success": True,
+                "message": f"Door unlocked for {time} seconds"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_lock_state(self) -> str:
+        """
+        Get the current door lock state.
+        
+        Returns:
+            JSON string with lock state
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            state = self.conn.get_lock_state()
+            return json.dumps({
+                "success": True,
+                "locked": state
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def write_lcd(self, line_number: int, text: str) -> str:
+        """
+        Write text to device LCD screen.
+        
+        Args:
+            line_number: Line number on LCD (0-based)
+            text: Text to display
+            
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.write_lcd(line_number, text)
+            return json.dumps({
+                "success": True,
+                "message": f"LCD line {line_number} updated"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def clear_lcd(self) -> str:
+        """
+        Clear the device LCD screen.
+        
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.clear_lcd()
+            return json.dumps({
+                "success": True,
+                "message": "LCD cleared"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def refresh_data(self) -> str:
+        """
+        Refresh device data.
+        
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.refresh_data()
+            return json.dumps({
+                "success": True,
+                "message": "Device data refreshed"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def free_data(self) -> str:
+        """
+        Free device buffer.
+        
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.free_data()
+            return json.dumps({
+                "success": True,
+                "message": "Device buffer freed"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_face_version(self) -> str:
+        """
+        Get face algorithm version.
+        
+        Returns:
+            JSON string with face version
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            version = self.conn.get_face_version()
+            return json.dumps({
+                "success": True,
+                "face_version": version
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_fp_version(self) -> str:
+        """
+        Get fingerprint algorithm version.
+        
+        Returns:
+            JSON string with fingerprint version
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            version = self.conn.get_fp_version()
+            return json.dumps({
+                "success": True,
+                "fingerprint_version": version
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_network_params(self) -> str:
+        """
+        Get device network parameters (IP, mask, gateway).
+        
+        Returns:
+            JSON string with network parameters
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            params = self.conn.get_network_params()
+            return json.dumps({
+                "success": True,
+                "network": params
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_pin_width(self) -> str:
+        """
+        Get PIN width configuration.
+        
+        Returns:
+            JSON string with PIN width
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            width = self.conn.get_pin_width()
+            return json.dumps({
+                "success": True,
+                "pin_width": width
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_extend_fmt(self) -> str:
+        """
+        Get extend format configuration.
+        
+        Returns:
+            JSON string with extend format
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            fmt = self.conn.get_extend_fmt()
+            return json.dumps({
+                "success": True,
+                "extend_format": fmt
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_user_extend_fmt(self) -> str:
+        """
+        Get user extend format configuration.
+        
+        Returns:
+            JSON string with user extend format
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            fmt = self.conn.get_user_extend_fmt()
+            return json.dumps({
+                "success": True,
+                "user_extend_format": fmt
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_face_fun_on(self) -> str:
+        """
+        Check if face function is enabled.
+        
+        Returns:
+            JSON string with face function status
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            enabled = self.conn.get_face_fun_on()
+            return json.dumps({
+                "success": True,
+                "face_function_enabled": bool(enabled)
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_compat_old_firmware(self) -> str:
+        """
+        Check firmware compatibility.
+        
+        Returns:
+            JSON string with firmware compatibility info
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            compat = self.conn.get_compat_old_firmware()
+            return json.dumps({
+                "success": True,
+                "old_firmware_compatible": compat
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_templates_json(self) -> str:
+        """
+        Get all fingerprint templates from the device as JSON string.
+        
+        Returns:
+            JSON string containing list of templates
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.disable_device()
+            templates = self.conn.get_templates()
+            
+            templates_list = []
+            for template in templates:
+                templates_list.append({
+                    "uid": template.uid,
+                    "fid": template.fid,
+                    "valid": template.valid,
+                    "template_size": len(template.template) if template.template else 0
+                })
+            
+            self.conn.enable_device()
+            
+            return json.dumps({
+                "success": True,
+                "count": len(templates_list),
+                "templates": templates_list
+            })
+        except Exception as e:
+            if self.conn:
+                self.conn.enable_device()
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def get_user_template_json(self, uid: int = None, temp_id: int = 0, user_id: str = None) -> str:
+        """
+        Get a specific user's fingerprint template.
+        
+        Args:
+            uid: User UID (optional if user_id provided)
+            temp_id: Template ID (finger index 0-9, default: 0)
+            user_id: User ID string (optional if uid provided)
+            
+        Returns:
+            JSON string with template data
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.disable_device()
+            template = self.conn.get_user_template(uid=uid or 0, temp_id=temp_id, user_id=user_id or '')
+            self.conn.enable_device()
+            
+            if template:
+                return json.dumps({
+                    "success": True,
+                    "template": {
+                        "uid": template.uid,
+                        "fid": template.fid,
+                        "valid": template.valid,
+                        "template_size": len(template.template) if template.template else 0
+                    }
+                })
+            else:
+                return json.dumps({
+                    "success": False,
+                    "error": "Template not found"
+                })
+        except Exception as e:
+            if self.conn:
+                self.conn.enable_device()
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def delete_user_template(self, uid: int = 0, temp_id: int = 0, user_id: str = '') -> str:
+        """
+        Delete a specific user's fingerprint template.
+        
+        Args:
+            uid: User UID (optional if user_id provided)
+            temp_id: Template ID (finger index 0-9, default: 0)
+            user_id: User ID string (optional if uid provided)
+            
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.disable_device()
+            result = self.conn.delete_user_template(uid=uid, temp_id=temp_id, user_id=user_id)
+            self.conn.enable_device()
+            
+            if result:
+                return json.dumps({
+                    "success": True,
+                    "message": "Template deleted successfully"
+                })
+            else:
+                return json.dumps({
+                    "success": False,
+                    "error": "Template not found or could not be deleted"
+                })
+        except Exception as e:
+            if self.conn:
+                self.conn.enable_device()
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def enroll_user(self, uid: int = 0, temp_id: int = 0, user_id: str = '') -> str:
+        """
+        Start fingerprint enrollment for a user.
+        
+        Args:
+            uid: User UID
+            temp_id: Template ID (finger index 0-9, default: 0)
+            user_id: User ID string
+            
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            result = self.conn.enroll_user(uid=uid, temp_id=temp_id, user_id=user_id)
+            
+            if result:
+                return json.dumps({
+                    "success": True,
+                    "message": "Enrollment completed successfully"
+                })
+            else:
+                return json.dumps({
+                    "success": False,
+                    "error": "Enrollment failed"
+                })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def verify_user(self) -> str:
+        """
+        Start user verification mode.
+        
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.verify_user()
+            return json.dumps({
+                "success": True,
+                "message": "Verification mode started"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def cancel_capture(self) -> str:
+        """
+        Cancel fingerprint capture operation.
+        
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            result = self.conn.cancel_capture()
+            return json.dumps({
+                "success": True,
+                "cancelled": result
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def reg_event(self, flags: int) -> str:
+        """
+        Register for device events.
+        
+        Args:
+            flags: Event flags (see const.EF_* constants)
+            
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.reg_event(flags)
+            return json.dumps({
+                "success": True,
+                "message": f"Registered for events with flags {flags}"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def set_sdk_build_1(self) -> str:
+        """
+        Set SDK build to 1.
+        
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            result = self.conn.set_sdk_build_1()
+            return json.dumps({
+                "success": result,
+                "message": "SDK build set to 1" if result else "Failed to set SDK build"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def clear_data(self) -> str:
+        """
+        Clear all data from device (users, attendance, fingerprints).
+        WARNING: This will delete all data!
+        
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.disable_device()
+            self.conn.clear_data()
+            self.conn.enable_device()
+            
+            return json.dumps({
+                "success": True,
+                "message": "All data cleared from device"
+            })
+        except Exception as e:
+            if self.conn:
+                self.conn.enable_device()
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def enable_device(self) -> str:
+        """
+        Enable device (allow user activity).
+        
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.enable_device()
+            return json.dumps({
+                "success": True,
+                "message": "Device enabled"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
+    
+    def disable_device(self) -> str:
+        """
+        Disable device (lock device, prevent user activity).
+        
+        Returns:
+            JSON string with operation result
+        """
+        if not self._is_connected or not self.conn:
+            return json.dumps({"success": False, "error": "Not connected to device"})
+        
+        try:
+            self.conn.disable_device()
+            return json.dumps({
+                "success": True,
+                "message": "Device disabled"
+            })
+        except Exception as e:
+            return json.dumps({"success": False, "error": str(e)})
 
 
 # Example usage for testing
